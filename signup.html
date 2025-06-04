@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up - GYMNATION</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">GYM<span class="green">N</span><span class="red">ATION</span></div>
+  </header>
+
+  <div class="signup-page">
+    <section class="signup-form">
+      <h2>Create Your Account</h2>
+      <form id="signupForm">
+        <input type="text" id="name" placeholder="Full Name" required />
+        <input type="email" id="email" placeholder="Email Address" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Sign Up</button>
+      </form>
+      <p id="generatedID" style="margin-top: 20px; font-weight: bold;"></p>
+    </section>
+  </div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      fetch("http://localhost:8080/api/members/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      })
+      .then(response => {
+        if (response.ok) {
+          // Redirect with username in URL
+          window.location.href = `dashboard.html?username=${encodeURIComponent(name)}`;
+        } else {
+          alert("Signup failed.");
+        }
+      })
+      .catch(error => {
+        console.error("Signup error:", error);
+        alert("Something went wrong.");
+      });
+    });
+  </script>
+</body>
+</html>
