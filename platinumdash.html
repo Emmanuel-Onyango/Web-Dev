@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> OUR REGULAR MEMBER</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard">
+  <header>
+    <h1>Welcome, <span id="userName">Alex</span>!</h1>
+    <p id="date"></p>
+  </header>
+
+  <section class="progress-section">
+    <h2>Your Progress</h2>
+    <canvas id="workoutChart" width="400" height="200"></canvas>
+  </section>
+
+  <section class="calendar-section">
+    <h2>Workout Schedule</h2>
+    <ul>
+      <li><label><input type="checkbox" /> Monday - Cardio</label></li>
+      <li><label><input type="checkbox" /> Wednesday - Strength</label></li>
+      <li><label><input type="checkbox" /> Friday - Full Body</label></li>
+    </ul>
+  </section>
+
+  <section class="log-section">
+    <h2>Workout Log</h2>
+    <form id="logForm">
+      <input type="text" id="workoutType" placeholder="Workout Type" required />
+      <input type="number" id="duration" placeholder="Duration (mins)" required />
+      <textarea id="notes" placeholder="Notes..."></textarea>
+      <button type="submit">Save Log</button>
+    </form>
+    <div class="log-entries" id="logEntries">
+      <!-- Dynamic logs will appear here -->
+    </div>
+  </section>
+
+  <section class="package-info">
+    <h2>Regular Package Benefits</h2>
+    <ul>
+      <li>Unlimited gym access</li>
+      <li>Standard equipment use</li>
+      <li>Locker room access</li>
+    </ul>
+    <p>Need more? <a href="#">Upgrade to Premium</a></p>
+  </section>
+
+  <footer>
+    <a href="#">Edit Profile</a> | <a href="#">Log Out</a>
+  </footer>
+
+  <script>
+    // Display today's date
+    document.getElementById("date").innerText = new Date().toDateString();
+
+    // Initialize chart
+    const ctx = document.getElementById('workoutChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        datasets: [{
+          label: 'Workout Duration (min)',
+          data: [45, 0, 60, 0, 50],
+          backgroundColor: 'rgba(0, 114, 255, 0.6)'
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    // Handle workout log submission
+    document.getElementById("logForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const type = document.getElementById("workoutType").value;
+      const duration = document.getElementById("duration").value;
+      const notes = document.getElementById("notes").value;
+      const date = new Date().toLocaleDateString();
+
+      const entry = document.createElement("p");
+      entry.innerHTML = `<strong>${date}:</strong> ${duration} mins ${type} - ${notes}`;
+      document.getElementById("logEntries").prepend(entry);
+
+      this.reset();
+    });
+  </script>
+</body>
+</html>

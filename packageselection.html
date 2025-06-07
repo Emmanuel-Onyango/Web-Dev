@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" class="packageselection">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Package Selection - GYMNATION</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="packageselection">
+
+  <div class="background-overlay"></div>
+
+  <h1 class="package-title-main">Choose Your Package</h1>
+
+  <div class="packages-container">
+    <div class="package-card package-regular">
+      <h2 class="package-title">Regular</h2>
+      <p class="package-description">Basic gym access and standard equipment.</p>
+      <button class="select-btn">Select</button>
+    </div>
+    <div class="package-card package-premium">
+      <h2 class="package-title">Premium</h2>
+      <p class="package-description">Instructor booking and full gym access</p>
+      <button class="select-btn">Select</button>
+    </div>
+    <div class="package-card package-platinum">
+      <h2 class="package-title">Platinum</h2>
+      <p class="package-description">Personal trainer, gym merch, house calls, instructor of your choice.</p>
+      <button class="select-btn">Select</button>
+    </div>
+  </div>
+  <script>
+    const cards = document.querySelectorAll('.package-card');
+
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        cards.forEach(c => c.classList.remove('hovered'));
+        card.classList.add('hovered');
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.classList.remove('hovered');
+      });
+    });
+  </script>
+
+</body>
+</html>

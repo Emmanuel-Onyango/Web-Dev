@@ -22,35 +22,33 @@
       <p id="generatedID" style="margin-top: 20px; font-weight: bold;"></p>
     </section>
   </div>
-
-  <script>
-    document.getElementById("signupForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      fetch("http://localhost:8080/api/members/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password }),
-      })
+<script>
+  document.getElementById("signupForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const password = document.getElementById("password").value;
+  
+    fetch("http://localhost:8080/api/members/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, password }),
+    })
       .then(response => {
-        if (response.ok) {
-          // Redirect with username in URL
-          window.location.href = `dashboard.html?username=${encodeURIComponent(name)}`;
-        } else {
-          alert("Signup failed.");
-        }
+        if (!response.ok) throw new Error('Signup failed');
+        return response.json();  // Expect JSON with admissionNumber
       })
-      .catch(error => {
-        console.error("Signup error:", error);
-        alert("Something went wrong.");
+      .then(data => {
+        alert(`Signup successful!\nYour membership ID is: ${data.admissionNumber}\nPlease keep your password safe.`);
+        // Redirect with username param, or you can send admissionNumber if you prefer
+        window.location.href = `dashboard.html?username=${encodeURIComponent(name)}`;
+      })
+      .catch(err => {
+        alert("Signup failed. Please try again.");
+        console.error(err);
       });
-    });
+  });
   </script>
+  
+  
 </body>
 </html>

@@ -14,7 +14,8 @@
     <section class="login-form">
       <h2>Member Login</h2>
       <form id="loginForm">
-        <input type="text" id="memberId" placeholder="Enter Membership ID" required />
+        <input type="text" id="admissionNumber" placeholder="Enter Membership ID" required />
+        <input type="password" id="password" placeholder="Enter Password" required />
         <button type="submit">Log In</button>
       </form>
       <p id="loginMsg" style="margin-top: 20px; font-weight: bold;"></p>
@@ -22,27 +23,34 @@
   </div>
 
   <script>
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      const id = document.getElementById("loginId").value;
-      const password = document.getElementById("loginPassword").value;
-  
+      const admissionNumber = document.getElementById("admissionNumber").value;
+      const password = document.getElementById("password").value;
+
       fetch("http://localhost:8080/api/members/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id, password }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ admissionNumber, password }),
       })
-        .then(response => response.text())
-        .then(msg => {
-          document.getElementById("loginMessage").innerText = msg;
-        })
-        .catch(error => console.error("Login failed:", error));
+      .then(response => {
+        if (!response.ok) throw new Error('Login failed');
+        return response.json(); // Expect JSON response from backend
+      })
+      .then(data => {
+        // Assume backend returns JSON like { success: true, username: "John" }
+        if (data.success) {
+          // Redirect to dashboard with username in query param
+          window.location.href = `dashboard.html?username=${encodeURIComponent(data.username)}`;
+        } else {
+          document.getElementById("loginMsg").innerText = data.message || "Invalid login credentials.";
+        }
+      })
+      .catch(err => {
+        document.getElementById("loginMsg").innerText = "Login failed. Please try again.";
+        console.error(err);
+      });
     });
   </script>
-  
-    
-  
 </body>
 </html>
